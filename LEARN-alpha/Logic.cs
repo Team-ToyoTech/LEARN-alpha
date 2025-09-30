@@ -1,18 +1,11 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LEARN_alpha
+﻿namespace LEARN_alpha
 {
     internal class Logic
     {
-        List<Logic> in1 = new List<Logic>();
-        List<Logic> in2 = new List<Logic>();
-        List<Logic> out1 = new List<Logic>();
-        List<Logic> out2 = new List<Logic>();
+        List<Logic> in1 = [];
+        List<Logic> in2 = [];
+        List<Logic> out1 = [];
+        List<Logic> out2 = [];
 
         int id = 0;
 
@@ -41,7 +34,8 @@ namespace LEARN_alpha
 
         public void Connect(Logic other, ConnectionType connectionType)
         {
-            if(other == null) throw new ArgumentNullException(nameof(other));
+            ArgumentNullException.ThrowIfNull(other);
+
             switch (connectionType)
             {
                 case ConnectionType.Input1:
