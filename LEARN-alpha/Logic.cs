@@ -5,19 +5,20 @@ namespace LEARN_alpha
 {
     internal class Logic
     {
-        private readonly Dictionary<ConnectionType, List<Logic>> _connections;
+        private readonly List<Logic> _input1 = new();
+        private readonly List<Logic> _input2 = new();
+        private readonly List<Logic> _input3 = new();
+        private readonly List<Logic> _input4 = new();
+        private readonly List<Logic> _output1 = new();
+        private readonly List<Logic> _output2 = new();
+        private readonly List<Logic> _output3 = new();
+        private readonly List<Logic> _output4 = new();
 
         private readonly int id;
 
         public Logic(int id)
         {
             this.id = id;
-            _connections = new Dictionary<ConnectionType, List<Logic>>();
-
-            foreach (ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
-            {
-                _connections[type] = new List<Logic>();
-            }
         }
 
         public int Id => id;
@@ -66,26 +67,40 @@ namespace LEARN_alpha
 
         public IReadOnlyList<Logic> GetConnections(ConnectionType connectionType)
         {
-            if (!_connections.TryGetValue(connectionType, out var connections))
+            return connectionType switch
             {
-                throw new ArgumentOutOfRangeException(nameof(connectionType), connectionType, null);
-            }
-
-            return connections;
+                ConnectionType.Input1 => _input1,
+                ConnectionType.Input2 => _input2,
+                ConnectionType.Input3 => _input3,
+                ConnectionType.Input4 => _input4,
+                ConnectionType.Output1 => _output1,
+                ConnectionType.Output2 => _output2,
+                ConnectionType.Output3 => _output3,
+                ConnectionType.Output4 => _output4,
+                _ => throw new ArgumentOutOfRangeException(nameof(connectionType), connectionType, null)
+            };
         }
 
         public void Connect(Logic other, ConnectionType connectionType)
         {
             ArgumentNullException.ThrowIfNull(other);
 
-            if (!_connections.TryGetValue(connectionType, out var connections))
+            List<Logic> connectionList = connectionType switch
             {
-                throw new ArgumentOutOfRangeException(nameof(connectionType), connectionType, null);
-            }
+                ConnectionType.Input1 => _input1,
+                ConnectionType.Input2 => _input2,
+                ConnectionType.Input3 => _input3,
+                ConnectionType.Input4 => _input4,
+                ConnectionType.Output1 => _output1,
+                ConnectionType.Output2 => _output2,
+                ConnectionType.Output3 => _output3,
+                ConnectionType.Output4 => _output4,
+                _ => throw new ArgumentOutOfRangeException(nameof(connectionType), connectionType, null)
+            };
 
-            if (!connections.Contains(other))
+            if (!connectionList.Contains(other))
             {
-                connections.Add(other);
+                connectionList.Add(other);
             }
         }
     }
