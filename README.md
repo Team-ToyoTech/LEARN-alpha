@@ -1,2 +1,2 @@
 # L:EARN-alpha
-* Logic: Experimentation & Reasoning Network
+> Logic: Experimentation & Reasoning Network
