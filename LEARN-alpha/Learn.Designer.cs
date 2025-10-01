@@ -36,8 +36,19 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Name = "Learn";
-            Text = "LEARN ver.α";
+            Text = "LEARN α test";
             ResumeLayout(false);
+            DoubleBuffered = true;
+            BackColor = Color.White;
+            KeyPreview = true;
+            SetStyle(ControlStyles.AllPaintingInWmPaint |
+                     ControlStyles.OptimizedDoubleBuffer |
+                     ControlStyles.UserPaint, true);
+
+            MouseDown += OnMouseDown;
+            MouseMove += OnMouseMove;
+            MouseUp += OnMouseUp;
+            KeyDown += OnKeyDown;
         }
 
         #endregion
