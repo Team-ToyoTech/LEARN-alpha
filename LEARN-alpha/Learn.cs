@@ -47,8 +47,7 @@ namespace LEARN_alpha
             isDragging = false;
             Capture = false;
 
-            // Shift가 눌려있지 않으면 수평→수직, 눌려있으면 수직→수평
-            bool preferHorizontalFirst = (ModifierKeys & Keys.Shift) == 0;
+            bool preferHorizontalFirst = PreferHorizontalFirst(start, e.Location);
 
             var trio = BuildOrthogonalPath(start, e.Location, preferHorizontalFirst);
             if (trio != null)
@@ -76,7 +75,7 @@ namespace LEARN_alpha
                 // 드래그 중 미리보기
                 if (isDragging)
                 {
-                    bool preferHorizontalFirst = (ModifierKeys & Keys.Shift) == 0;
+                    bool preferHorizontalFirst = PreferHorizontalFirst(start, current);
                     var trio = BuildOrthogonalPath(start, current, preferHorizontalFirst);
                     if (trio != null)
                     {
@@ -97,6 +96,14 @@ namespace LEARN_alpha
             {
                 g.DrawLines(pen, pts);
             }
+        }
+
+        // 가로/세로 이동량 비교: |Δx| >= |Δy| 이면 수평→수직, 아니면 수직→수평
+        private static bool PreferHorizontalFirst(Point a, Point b)
+        {
+            int dx = Math.Abs(b.X - a.X);
+            int dy = Math.Abs(b.Y - a.Y);
+            return dx >= dy;
         }
 
         // 시작점 a와 끝점 b를 "대각선 없이" 연결하는 경로를 만든다.
