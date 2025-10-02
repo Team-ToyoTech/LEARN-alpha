@@ -65,22 +65,19 @@ namespace LEARN_alpha
 
         private sealed class GateConnectorTemplate
         {
-            public GateConnectorTemplate(ConnectorRole role, Point relativeAnchor, Size hitSize)
+            public GateConnectorTemplate(ConnectorRole role, Point relativeAnchor)
             {
                 Role = role;
                 RelativeAnchor = relativeAnchor;
-                HitSize = hitSize;
             }
 
             public ConnectorRole Role { get; }
             public Point RelativeAnchor { get; }
-            public Size HitSize { get; }
         }
 
         private sealed class GateConnector
         {
             private readonly GateConnectorTemplate template;
-            private Rectangle bounds;
             private Point anchor;
 
             public GateConnector(GateConnectorTemplate template)
@@ -90,14 +87,11 @@ namespace LEARN_alpha
 
             public ConnectorRole Role => template.Role;
 
-            public Rectangle Bounds => bounds;
-
             public Point Anchor => anchor;
 
             public void Refresh(Point ownerLocation)
             {
                 anchor = new Point(ownerLocation.X + template.RelativeAnchor.X, ownerLocation.Y + template.RelativeAnchor.Y);
-                bounds = new Rectangle(anchor.X - template.HitSize.Width / 2, anchor.Y - template.HitSize.Height / 2, template.HitSize.Width, template.HitSize.Height);
             }
         }
 
@@ -497,7 +491,6 @@ namespace LEARN_alpha
 
         private static IReadOnlyList<GateConnectorTemplate> BuildGateConnectorTemplates(ToolType tool, Size displaySize)
         {
-            int hitSize = Math.Max(12, Math.Min(displaySize.Width, displaySize.Height) / 4);
             int margin = Math.Max(4, (int)Math.Round(displaySize.Width * 0.1));
             margin = Math.Min(margin, displaySize.Width / 2);
             int leftX = margin;
@@ -508,17 +501,17 @@ namespace LEARN_alpha
 
             if (tool == ToolType.GateNot)
             {
-                connectors.Add(new GateConnectorTemplate(ConnectorRole.Input, new Point(leftX, midY), new Size(hitSize, hitSize)));
-                connectors.Add(new GateConnectorTemplate(ConnectorRole.Output, new Point(rightX, midY), new Size(hitSize, hitSize)));
+                connectors.Add(new GateConnectorTemplate(ConnectorRole.Input, new Point(leftX, midY)));
+                connectors.Add(new GateConnectorTemplate(ConnectorRole.Output, new Point(rightX, midY)));
                 return connectors;
             }
 
             int topY = (int)Math.Round(displaySize.Height * 0.35);
             int bottomY = (int)Math.Round(displaySize.Height * 0.65);
 
-            connectors.Add(new GateConnectorTemplate(ConnectorRole.Input, new Point(leftX, topY), new Size(hitSize, hitSize)));
-            connectors.Add(new GateConnectorTemplate(ConnectorRole.Input, new Point(leftX, bottomY), new Size(hitSize, hitSize)));
-            connectors.Add(new GateConnectorTemplate(ConnectorRole.Output, new Point(rightX, midY), new Size(hitSize, hitSize)));
+            connectors.Add(new GateConnectorTemplate(ConnectorRole.Input, new Point(leftX, topY)));
+            connectors.Add(new GateConnectorTemplate(ConnectorRole.Input, new Point(leftX, bottomY)));
+            connectors.Add(new GateConnectorTemplate(ConnectorRole.Output, new Point(rightX, midY)));
             return connectors;
         }
 
@@ -593,7 +586,7 @@ namespace LEARN_alpha
                 var gate = gates[i];
                 foreach (var connector in gate.Connectors)
                 {
-                    if (connector.Bounds.Contains(location))
+                    if (connector.Anchor == location)
                     {
                         return (gate, connector);
                     }
