@@ -33,6 +33,8 @@
             pointerButton = new Button();
             penButton = new Button();
             eraserButton = new Button();
+            logicGateMenuButton = new Button();
+            gatePanel = new FlowLayoutPanel();
             andGateButton = new Button();
             orGateButton = new Button();
             notGateButton = new Button();
@@ -41,6 +43,7 @@
             norGateButton = new Button();
             xnorGateButton = new Button();
             toolPanel.SuspendLayout();
+            gatePanel.SuspendLayout();
             SuspendLayout();
             //
             // toolPanel
@@ -52,19 +55,13 @@
             toolPanel.Controls.Add(pointerButton);
             toolPanel.Controls.Add(penButton);
             toolPanel.Controls.Add(eraserButton);
-            toolPanel.Controls.Add(andGateButton);
-            toolPanel.Controls.Add(orGateButton);
-            toolPanel.Controls.Add(notGateButton);
-            toolPanel.Controls.Add(xorGateButton);
-            toolPanel.Controls.Add(nandGateButton);
-            toolPanel.Controls.Add(norGateButton);
-            toolPanel.Controls.Add(xnorGateButton);
+            toolPanel.Controls.Add(logicGateMenuButton);
             toolPanel.FlowDirection = FlowDirection.LeftToRight;
             toolPanel.Location = new Point(12, 12);
             toolPanel.Margin = new Padding(4);
             toolPanel.Name = "toolPanel";
             toolPanel.Padding = new Padding(8, 6, 8, 6);
-            toolPanel.Size = new Size(961, 64);
+            toolPanel.Size = new Size(410, 64);
             toolPanel.TabIndex = 0;
             toolPanel.WrapContents = false;
             //
@@ -104,15 +101,51 @@
             eraserButton.Text = "지우개";
             eraserButton.UseVisualStyleBackColor = false;
             //
+            // logicGateMenuButton
+            //
+            logicGateMenuButton.BackColor = SystemColors.ControlLight;
+            logicGateMenuButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            logicGateMenuButton.Location = new Point(306, 9);
+            logicGateMenuButton.Margin = new Padding(4, 3, 4, 3);
+            logicGateMenuButton.Name = "logicGateMenuButton";
+            logicGateMenuButton.Size = new Size(140, 44);
+            logicGateMenuButton.TabIndex = 3;
+            logicGateMenuButton.Text = "논리 게이트";
+            logicGateMenuButton.UseVisualStyleBackColor = false;
+            logicGateMenuButton.Click += OnLogicGateMenuButtonClick;
+            //
+            // gatePanel
+            //
+            gatePanel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            gatePanel.AutoSize = true;
+            gatePanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            gatePanel.BackColor = Color.FromArgb(245, 245, 245);
+            gatePanel.Controls.Add(andGateButton);
+            gatePanel.Controls.Add(orGateButton);
+            gatePanel.Controls.Add(notGateButton);
+            gatePanel.Controls.Add(xorGateButton);
+            gatePanel.Controls.Add(nandGateButton);
+            gatePanel.Controls.Add(norGateButton);
+            gatePanel.Controls.Add(xnorGateButton);
+            gatePanel.FlowDirection = FlowDirection.LeftToRight;
+            gatePanel.Location = new Point(12, 84);
+            gatePanel.Margin = new Padding(4);
+            gatePanel.Name = "gatePanel";
+            gatePanel.Padding = new Padding(8, 6, 8, 6);
+            gatePanel.Size = new Size(961, 64);
+            gatePanel.TabIndex = 1;
+            gatePanel.Visible = false;
+            gatePanel.WrapContents = false;
+            //
             // andGateButton
             //
             andGateButton.BackColor = SystemColors.ControlLight;
             andGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            andGateButton.Location = new Point(306, 9);
+            andGateButton.Location = new Point(12, 9);
             andGateButton.Margin = new Padding(4, 3, 4, 3);
             andGateButton.Name = "andGateButton";
             andGateButton.Size = new Size(90, 44);
-            andGateButton.TabIndex = 3;
+            andGateButton.TabIndex = 0;
             andGateButton.Text = "AND";
             andGateButton.UseVisualStyleBackColor = false;
             //
@@ -120,11 +153,11 @@
             //
             orGateButton.BackColor = SystemColors.ControlLight;
             orGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            orGateButton.Location = new Point(404, 9);
+            orGateButton.Location = new Point(110, 9);
             orGateButton.Margin = new Padding(4, 3, 4, 3);
             orGateButton.Name = "orGateButton";
             orGateButton.Size = new Size(90, 44);
-            orGateButton.TabIndex = 4;
+            orGateButton.TabIndex = 1;
             orGateButton.Text = "OR";
             orGateButton.UseVisualStyleBackColor = false;
             //
@@ -132,11 +165,11 @@
             //
             notGateButton.BackColor = SystemColors.ControlLight;
             notGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            notGateButton.Location = new Point(502, 9);
+            notGateButton.Location = new Point(208, 9);
             notGateButton.Margin = new Padding(4, 3, 4, 3);
             notGateButton.Name = "notGateButton";
             notGateButton.Size = new Size(90, 44);
-            notGateButton.TabIndex = 5;
+            notGateButton.TabIndex = 2;
             notGateButton.Text = "NOT";
             notGateButton.UseVisualStyleBackColor = false;
             //
@@ -144,11 +177,11 @@
             //
             xorGateButton.BackColor = SystemColors.ControlLight;
             xorGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            xorGateButton.Location = new Point(600, 9);
+            xorGateButton.Location = new Point(306, 9);
             xorGateButton.Margin = new Padding(4, 3, 4, 3);
             xorGateButton.Name = "xorGateButton";
             xorGateButton.Size = new Size(90, 44);
-            xorGateButton.TabIndex = 6;
+            xorGateButton.TabIndex = 3;
             xorGateButton.Text = "XOR";
             xorGateButton.UseVisualStyleBackColor = false;
             //
@@ -156,11 +189,11 @@
             //
             nandGateButton.BackColor = SystemColors.ControlLight;
             nandGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            nandGateButton.Location = new Point(698, 9);
+            nandGateButton.Location = new Point(404, 9);
             nandGateButton.Margin = new Padding(4, 3, 4, 3);
             nandGateButton.Name = "nandGateButton";
             nandGateButton.Size = new Size(90, 44);
-            nandGateButton.TabIndex = 7;
+            nandGateButton.TabIndex = 4;
             nandGateButton.Text = "NAND";
             nandGateButton.UseVisualStyleBackColor = false;
             //
@@ -168,11 +201,11 @@
             //
             norGateButton.BackColor = SystemColors.ControlLight;
             norGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            norGateButton.Location = new Point(796, 9);
+            norGateButton.Location = new Point(502, 9);
             norGateButton.Margin = new Padding(4, 3, 4, 3);
             norGateButton.Name = "norGateButton";
             norGateButton.Size = new Size(90, 44);
-            norGateButton.TabIndex = 8;
+            norGateButton.TabIndex = 5;
             norGateButton.Text = "NOR";
             norGateButton.UseVisualStyleBackColor = false;
             //
@@ -180,11 +213,11 @@
             //
             xnorGateButton.BackColor = SystemColors.ControlLight;
             xnorGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            xnorGateButton.Location = new Point(894, 9);
+            xnorGateButton.Location = new Point(600, 9);
             xnorGateButton.Margin = new Padding(4, 3, 4, 3);
             xnorGateButton.Name = "xnorGateButton";
             xnorGateButton.Size = new Size(90, 44);
-            xnorGateButton.TabIndex = 9;
+            xnorGateButton.TabIndex = 6;
             xnorGateButton.Text = "XNOR";
             xnorGateButton.UseVisualStyleBackColor = false;
             //
@@ -194,6 +227,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1063, 610);
+            Controls.Add(gatePanel);
             Controls.Add(toolPanel);
             DoubleBuffered = true;
             KeyPreview = true;
@@ -205,6 +239,7 @@
             MouseUp += OnMouseUp;
             MouseLeave += OnMouseLeave;
             toolPanel.ResumeLayout(false);
+            gatePanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -215,6 +250,8 @@
         private Button pointerButton;
         private Button penButton;
         private Button eraserButton;
+        private Button logicGateMenuButton;
+        private FlowLayoutPanel gatePanel;
         private Button andGateButton;
         private Button orGateButton;
         private Button notGateButton;

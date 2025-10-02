@@ -151,6 +151,12 @@ namespace LEARN_alpha
 
         private Point? gatePreviewLocation;
 
+        private void OnLogicGateMenuButtonClick(object? sender, EventArgs e)
+        {
+            gatePanel.Visible = !gatePanel.Visible;
+            UpdateLogicGateMenuButtonState();
+        }
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             // C 키로 지우기
@@ -326,6 +332,10 @@ namespace LEARN_alpha
                 button.Click += OnToolButtonClick;
             }
 
+            logicGateMenuButton.FlatStyle = FlatStyle.Flat;
+            logicGateMenuButton.FlatAppearance.BorderSize = 0;
+            logicGateMenuButton.Margin = new Padding(3);
+
             SetCurrentTool(ToolType.Pointer);
         }
 
@@ -334,6 +344,12 @@ namespace LEARN_alpha
             if (sender is Button button && button.Tag is ToolType tool)
             {
                 SetCurrentTool(tool);
+
+                if (gatePanel.Visible && IsGateTool(tool))
+                {
+                    gatePanel.Visible = false;
+                    UpdateLogicGateMenuButtonState();
+                }
             }
         }
 
@@ -345,12 +361,19 @@ namespace LEARN_alpha
                 pair.Value.BackColor = pair.Key == currentTool ? Color.FromArgb(210, 230, 255) : SystemColors.ControlLight;
             }
 
+            UpdateLogicGateMenuButtonState();
+
             isDrawing = false;
             isErasing = false;
             gatePreviewLocation = null;
             ResetPointerState();
             Capture = false;
             Invalidate();
+        }
+
+        private void UpdateLogicGateMenuButtonState()
+        {
+            logicGateMenuButton.BackColor = gatePanel.Visible ? Color.FromArgb(210, 230, 255) : SystemColors.ControlLight;
         }
 
         private void ResetPointerState()
