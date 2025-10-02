@@ -35,7 +35,7 @@ namespace LEARN_alpha
             public Bitmap Image { get; }
             public Point Location { get; set; }
             public Size DisplaySize { get; }
-            public Rectangle Bounds => new Rectangle(Location, DisplaySize);
+            public Rectangle Bounds => new(Location, DisplaySize);
 
             public GateElement(ToolType type, Bitmap image, Point location, Size displaySize)
             {
@@ -46,10 +46,10 @@ namespace LEARN_alpha
             }
         }
 
-        private readonly List<Point[]> segments = new List<Point[]>();
-        private readonly List<GateElement> gates = new List<GateElement>();
-        private readonly Dictionary<ToolType, Bitmap> gateImages = new Dictionary<ToolType, Bitmap>();
-        private readonly Dictionary<ToolType, Button> toolButtons = new Dictionary<ToolType, Button>();
+        private readonly List<Point[]> segments = [];
+        private readonly List<GateElement> gates = [];
+        private readonly Dictionary<ToolType, Bitmap> gateImages = [];
+        private readonly Dictionary<ToolType, Button> toolButtons = [];
 
         private ToolType currentTool = ToolType.Pointer;
 
@@ -164,40 +164,38 @@ namespace LEARN_alpha
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            using (var pen = new Pen(Color.Black, 2))
-            using (var previewPen = new Pen(Color.Gray, 1) { DashStyle = DashStyle.Dash })
+            using var pen = new Pen(Color.Black, 2);
+            using var previewPen = new Pen(Color.Gray, 1) { DashStyle = DashStyle.Dash };
+            // 확정된 선들
+            foreach (var s in segments)
             {
-                // 확정된 선들
-                foreach (var s in segments)
-                {
-                    DrawOrthogonal(g, pen, s);
-                }
+                DrawOrthogonal(g, pen, s);
+            }
 
-                foreach (var gate in gates)
-                {
-                    g.DrawImage(gate.Image, gate.Bounds);
-                }
+            foreach (var gate in gates)
+            {
+                g.DrawImage(gate.Image, gate.Bounds);
+            }
 
-                // 드래그 중 미리보기
-                if (isDrawing)
+            // 드래그 중 미리보기
+            if (isDrawing)
+            {
+                bool preferHorizontalFirst = PreferHorizontalFirst(drawingStart, drawingCurrent);
+                var trio = BuildOrthogonalPath(drawingStart, drawingCurrent, preferHorizontalFirst);
+                if (trio != null)
                 {
-                    bool preferHorizontalFirst = PreferHorizontalFirst(drawingStart, drawingCurrent);
-                    var trio = BuildOrthogonalPath(drawingStart, drawingCurrent, preferHorizontalFirst);
-                    if (trio != null)
-                    {
-                        DrawOrthogonal(g, previewPen, trio);
-                    }
+                    DrawOrthogonal(g, previewPen, trio);
                 }
+            }
 
-                if (gatePreviewLocation.HasValue && IsGateTool(currentTool))
+            if (gatePreviewLocation.HasValue && IsGateTool(currentTool))
+            {
+                var img = GetGateImage(currentTool);
+                if (img != null)
                 {
-                    var img = GetGateImage(currentTool);
-                    if (img != null)
-                    {
-                        var size = GetGateDisplaySize(img);
-                        var aligned = AlignGateLocation(gatePreviewLocation.Value, size);
-                        DrawGatePreview(g, img, aligned, size);
-                    }
+                    var size = GetGateDisplaySize(img);
+                    var aligned = AlignGateLocation(gatePreviewLocation.Value, size);
+                    DrawGatePreview(g, img, aligned, size);
                 }
             }
         }
@@ -341,7 +339,7 @@ namespace LEARN_alpha
             Invalidate();
         }
 
-        private void DrawGatePreview(Graphics g, Image image, Point location, Size size)
+        private static void DrawGatePreview(Graphics g, Image image, Point location, Size size)
         {
             using var attrs = new ImageAttributes();
             var matrix = new ColorMatrix
@@ -465,10 +463,7 @@ namespace LEARN_alpha
             {
                 bitmap.Save(path);
             }
-            catch
-            {
-                // 무시: 실행 환경에 따라 쓸 수 없는 경우가 있을 수 있다.
-            }
+            catch {}
         }
 
         private GateElement? HitTestGate(Point location)
@@ -577,7 +572,7 @@ namespace LEARN_alpha
             }
         }
 
-        // 가로/세로 이동량 비교: |Δx| >= |Δy| 이면 수평→수직, 아니면 수직→수평
+        // 가로세로 이동량 비교: |dx| >= |dy| 이면 수평->수직, 아니면 수직->수평
         private static bool PreferHorizontalFirst(Point a, Point b)
         {
             int dx = Math.Abs(b.X - a.X);
@@ -586,30 +581,30 @@ namespace LEARN_alpha
         }
 
         // 시작점 a와 끝점 b를 "대각선 없이" 연결하는 경로를 만든다.
-        // preferHorizontalFirst = true  => 수평→수직
-        // preferHorizontalFirst = false => 수직→수평
+        // preferHorizontalFirst = true  => 수평->수직
+        // preferHorizontalFirst = false => 수직->수평
         private static Point[] BuildOrthogonalPath(Point a, Point b, bool preferHorizontalFirst)
         {
             if (a == b)
             {
-                return new Point[] { a, b };
+                return [a, b];
             }
 
             // 이미 수평 또는 수직으로 일직선인 경우
             if (a.X == b.X || a.Y == b.Y)
             {
-                return new Point[] { a, b };
+                return [a, b];
             }
 
             if (preferHorizontalFirst)
             {
-                Point elbow = new Point(b.X, a.Y); // 수평으로 맞춘 뒤 수직
-                return new Point[] { a, elbow, b };
+                Point elbow = new(b.X, a.Y); // 수평으로 맞춘 뒤 수직
+                return [a, elbow, b];
             }
             else
             {
-                Point elbow = new Point(a.X, b.Y); // 수직으로 맞춘 뒤 수평
-                return new Point[] { a, elbow, b };
+                Point elbow = new(a.X, b.Y); // 수직으로 맞춘 뒤 수평
+                return [a, elbow, b];
             }
         }
     }

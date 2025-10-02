@@ -2,18 +2,18 @@
 {
 	internal class Logic
 	{
-		List<(Logic logic, ConnectionType type)> in1 = [];
-		List<(Logic logic, ConnectionType type)> in2 = [];
-		List<(Logic logic, ConnectionType type)> out1 = [];
-		List<(Logic logic, ConnectionType type)> out2 = [];
+        readonly List<(Logic logic, ConnectionType type)> in1 = [];
+        readonly List<(Logic logic, ConnectionType type)> in2 = [];
+        readonly List<(Logic logic, ConnectionType type)> out1 = [];
+        readonly List<(Logic logic, ConnectionType type)> out2 = [];
 
 		bool in1State = false;
 		bool in2State = false;
 		bool out1State = false;
-		bool out2State = false;
+        readonly bool out2State = false;
 
-		LogicType type;
-		int id = 0;
+        readonly LogicType type;
+        readonly int id = 0;
 
 		public Logic(int id, LogicType Type)
 		{
