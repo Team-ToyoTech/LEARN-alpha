@@ -21,7 +21,10 @@ namespace LEARN_alpha
             GateAnd,
             GateOr,
             GateNot,
-            GateXor
+            GateXor,
+            GateNand,
+            GateNor,
+            GateXnor
         }
 
         private const double GateScale = 0.5;
@@ -222,6 +225,9 @@ namespace LEARN_alpha
             toolButtons[ToolType.GateOr] = orGateButton;
             toolButtons[ToolType.GateNot] = notGateButton;
             toolButtons[ToolType.GateXor] = xorGateButton;
+            toolButtons[ToolType.GateNand] = nandGateButton;
+            toolButtons[ToolType.GateNor] = norGateButton;
+            toolButtons[ToolType.GateXnor] = xnorGateButton;
 
             foreach (var pair in toolButtons)
             {
@@ -355,7 +361,13 @@ namespace LEARN_alpha
 
         private static bool IsGateTool(ToolType tool)
         {
-            return tool == ToolType.GateAnd || tool == ToolType.GateOr || tool == ToolType.GateNot || tool == ToolType.GateXor;
+            return tool == ToolType.GateAnd
+                || tool == ToolType.GateOr
+                || tool == ToolType.GateNot
+                || tool == ToolType.GateXor
+                || tool == ToolType.GateNand
+                || tool == ToolType.GateNor
+                || tool == ToolType.GateXnor;
         }
 
         private Bitmap GetGateImage(ToolType tool)
@@ -376,6 +388,9 @@ namespace LEARN_alpha
                 ToolType.GateOr => "OR",
                 ToolType.GateNot => "NOT",
                 ToolType.GateXor => "XOR",
+                ToolType.GateNand => "NAND",
+                ToolType.GateNor => "NOR",
+                ToolType.GateXnor => "XNOR",
                 _ => throw new ArgumentOutOfRangeException(nameof(tool), tool, null)
             };
 

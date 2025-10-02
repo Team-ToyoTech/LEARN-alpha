@@ -37,6 +37,9 @@
             orGateButton = new Button();
             notGateButton = new Button();
             xorGateButton = new Button();
+            nandGateButton = new Button();
+            norGateButton = new Button();
+            xnorGateButton = new Button();
             toolPanel.SuspendLayout();
             SuspendLayout();
             //
@@ -53,12 +56,15 @@
             toolPanel.Controls.Add(orGateButton);
             toolPanel.Controls.Add(notGateButton);
             toolPanel.Controls.Add(xorGateButton);
+            toolPanel.Controls.Add(nandGateButton);
+            toolPanel.Controls.Add(norGateButton);
+            toolPanel.Controls.Add(xnorGateButton);
             toolPanel.FlowDirection = FlowDirection.LeftToRight;
             toolPanel.Location = new Point(12, 12);
             toolPanel.Margin = new Padding(4);
             toolPanel.Name = "toolPanel";
             toolPanel.Padding = new Padding(8, 6, 8, 6);
-            toolPanel.Size = new Size(667, 64);
+            toolPanel.Size = new Size(961, 64);
             toolPanel.TabIndex = 0;
             toolPanel.WrapContents = false;
             //
@@ -146,6 +152,42 @@
             xorGateButton.Text = "XOR";
             xorGateButton.UseVisualStyleBackColor = false;
             //
+            // nandGateButton
+            //
+            nandGateButton.BackColor = SystemColors.ControlLight;
+            nandGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            nandGateButton.Location = new Point(698, 9);
+            nandGateButton.Margin = new Padding(4, 3, 4, 3);
+            nandGateButton.Name = "nandGateButton";
+            nandGateButton.Size = new Size(90, 44);
+            nandGateButton.TabIndex = 7;
+            nandGateButton.Text = "NAND";
+            nandGateButton.UseVisualStyleBackColor = false;
+            //
+            // norGateButton
+            //
+            norGateButton.BackColor = SystemColors.ControlLight;
+            norGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            norGateButton.Location = new Point(796, 9);
+            norGateButton.Margin = new Padding(4, 3, 4, 3);
+            norGateButton.Name = "norGateButton";
+            norGateButton.Size = new Size(90, 44);
+            norGateButton.TabIndex = 8;
+            norGateButton.Text = "NOR";
+            norGateButton.UseVisualStyleBackColor = false;
+            //
+            // xnorGateButton
+            //
+            xnorGateButton.BackColor = SystemColors.ControlLight;
+            xnorGateButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            xnorGateButton.Location = new Point(894, 9);
+            xnorGateButton.Margin = new Padding(4, 3, 4, 3);
+            xnorGateButton.Name = "xnorGateButton";
+            xnorGateButton.Size = new Size(90, 44);
+            xnorGateButton.TabIndex = 9;
+            xnorGateButton.Text = "XNOR";
+            xnorGateButton.UseVisualStyleBackColor = false;
+            //
             // Learn
             //
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -177,5 +219,8 @@
         private Button orGateButton;
         private Button notGateButton;
         private Button xorGateButton;
+        private Button nandGateButton;
+        private Button norGateButton;
+        private Button xnorGateButton;
     }
 }
