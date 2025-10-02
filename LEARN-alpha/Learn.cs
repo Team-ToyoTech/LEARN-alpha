@@ -374,23 +374,43 @@ namespace LEARN_alpha
                 _ => throw new ArgumentOutOfRangeException(nameof(tool), tool, null)
             };
 
-            string assetsFolder = Path.Combine(AppContext.BaseDirectory, "Assets");
-            string filePath = Path.Combine(assetsFolder, $"{name}.png");
+            string baseDirectory = AppContext.BaseDirectory;
+            string primaryPath = Path.Combine(baseDirectory, $"{name}.png");
 
-            Bitmap image;
-            if (File.Exists(filePath))
+            Bitmap? image = LoadBitmapIfExists(primaryPath);
+            if (image == null)
             {
-                image = new Bitmap(filePath);
-            }
-            else
-            {
-                Directory.CreateDirectory(assetsFolder);
-                image = CreateFallbackGateImage(name);
-                TrySaveFallback(image, filePath);
+                string assetsFolder = Path.Combine(baseDirectory, "Assets");
+                string assetsPath = Path.Combine(assetsFolder, $"{name}.png");
+
+                image = LoadBitmapIfExists(assetsPath);
+                if (image == null)
+                {
+                    Directory.CreateDirectory(assetsFolder);
+                    image = CreateFallbackGateImage(name);
+                    TrySaveFallback(image, assetsPath);
+                }
             }
 
             gateImages[tool] = image;
             return image;
+        }
+
+        private static Bitmap? LoadBitmapIfExists(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                return new Bitmap(path);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static Bitmap CreateFallbackGateImage(string label)
