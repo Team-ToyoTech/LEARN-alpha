@@ -24,19 +24,22 @@ namespace LEARN_alpha
             GateXor
         }
 
+        private const double GateScale = 0.5;
+
         private sealed class GateElement
         {
             public ToolType Type { get; }
             public Bitmap Image { get; }
             public Point Location { get; set; }
-            public Size Size => Image.Size;
-            public Rectangle Bounds => new Rectangle(Location, Size);
+            public Size DisplaySize { get; }
+            public Rectangle Bounds => new Rectangle(Location, DisplaySize);
 
-            public GateElement(ToolType type, Bitmap image, Point location)
+            public GateElement(ToolType type, Bitmap image, Point location, Size displaySize)
             {
                 Type = type;
                 Image = image;
                 Location = location;
+                DisplaySize = displaySize;
             }
         }
 
@@ -188,8 +191,9 @@ namespace LEARN_alpha
                     var img = GetGateImage(currentTool);
                     if (img != null)
                     {
-                        var aligned = AlignGateLocation(gatePreviewLocation.Value, img.Size);
-                        DrawGatePreview(g, img, aligned);
+                        var size = GetGateDisplaySize(img);
+                        var aligned = AlignGateLocation(gatePreviewLocation.Value, size);
+                        DrawGatePreview(g, img, aligned, size);
                     }
                 }
             }
@@ -324,13 +328,14 @@ namespace LEARN_alpha
             }
 
             var image = GetGateImage(currentTool);
-            var aligned = AlignGateLocation(location, image.Size);
-            gates.Add(new GateElement(currentTool, image, aligned));
+            var size = GetGateDisplaySize(image);
+            var aligned = AlignGateLocation(location, size);
+            gates.Add(new GateElement(currentTool, image, aligned, size));
             gatePreviewLocation = location;
             Invalidate();
         }
 
-        private void DrawGatePreview(Graphics g, Image image, Point location)
+        private void DrawGatePreview(Graphics g, Image image, Point location, Size size)
         {
             using var attrs = new ImageAttributes();
             var matrix = new ColorMatrix
@@ -339,7 +344,7 @@ namespace LEARN_alpha
             };
             attrs.SetColorMatrix(matrix);
 
-            var destination = new Rectangle(location, image.Size);
+            var destination = new Rectangle(location, size);
             g.DrawImage(image, destination, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs);
         }
 
@@ -394,6 +399,13 @@ namespace LEARN_alpha
 
             gateImages[tool] = image;
             return image;
+        }
+
+        private static Size GetGateDisplaySize(Image image)
+        {
+            int width = Math.Max(1, (int)Math.Round(image.Width * GateScale));
+            int height = Math.Max(1, (int)Math.Round(image.Height * GateScale));
+            return new Size(width, height);
         }
 
         private static Bitmap? LoadBitmapIfExists(string path)
